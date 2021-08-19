@@ -16,7 +16,7 @@ namespace OrderService.MQ
     {
         public void Consume()
         {
-            var factory = new ConnectionFactory() { HostName = "localhost" };
+            var factory = new ConnectionFactory() { HostName = "192.168.1.38", Port=5672 };
             var connection = factory.CreateConnection();
             var channel = connection.CreateModel();
 
@@ -51,7 +51,7 @@ namespace OrderService.MQ
         private void FetchCustomer(RabbitMQMessage recievedCustomer)
         {
             var optionsBuilder = new DbContextOptionsBuilder<DatabaseContex>();
-            optionsBuilder.UseNpgsql("Host=localhost;Port=5433;Database=order_service;Username=postgres;Password=postgres");
+            optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=postgres;Username=postgres;Password=td");
             using (var _db = new DatabaseContex(optionsBuilder.Options))
             {
 

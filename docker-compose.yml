@@ -1,0 +1,71 @@
+version: '3.4'
+
+services:
+  apigateway:
+    image: ${DOCKER_REGISTRY-}apigateway
+    build:
+      context: .
+      dockerfile: APIGateway/Dockerfile
+    ports:
+         - "8001:80"
+    networks:
+      - td_network
+
+  orderservice:
+    image: ${DOCKER_REGISTRY-}orderservice
+    build:
+      context: .
+      dockerfile: OrderService/Dockerfile
+    ports:
+         - "8081:80"
+    depends_on:
+     rabbitmq:
+          condition: service_healthy
+    networks:
+      - td_network
+
+
+  customerservice:
+    image: ${DOCKER_REGISTRY-}customerservice
+    build:
+      context: .
+      dockerfile: CustomerService/Dockerfile
+    ports:
+         - "8080:80"
+    networks:
+      - td_network
+
+  postgresql:
+    image: postgres
+    restart: always
+    volumes:
+      - td_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: td
+      POSTGRES_USER: postgres
+    ports:
+      - 5433:5432
+    networks:
+      - td_network
+
+  rabbitmq:
+    restart: always
+    image: rabbitmq:3-management
+    container_name: rabbitmq3management
+    volumes:
+      - ./data:/data
+      - ./var:/var
+    healthcheck:
+      test: "exit 0"
+    ports:
+      - 15672:15672
+      - 5672:5672
+    networks:
+      - td_network
+volumes:
+  td_data:
+    driver: local
+
+networks:
+  td_network:
+    driver: bridge

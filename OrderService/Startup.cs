@@ -43,7 +43,7 @@ namespace OrderService
             });
 
             services.AddDbContext<DatabaseContex>(
-                options => options.UseNpgsql("Host=localhost;Port=5433;Database=order_service;Username=postgres;Password=postgres"));
+                options => options.UseNpgsql("Host=localhost;Port=5433;Database=postgres;Username=postgres;Password=td"));
             IMapper mapper = mapperConfig.CreateMapper();
             services.AddSingleton(mapper);
             ;

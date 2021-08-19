@@ -61,12 +61,16 @@ namespace OrderService.Controllers
             if (_db.Customers.Any(x => x.Id == orderDto.CustomerId))
                 isThereCustomer = true;
 
-            else if ((await httpClient.GetAsync($"http://localhost:50410/customer/{orderDto.CustomerId}")).StatusCode == System.Net.HttpStatusCode.OK)
+            else if ((await httpClient.GetAsync($"http://192.168.1.38:8001/customer/{orderDto.CustomerId}")).StatusCode == System.Net.HttpStatusCode.OK)
                 isThereCustomer = true;
 
+            //var adress = _db.Addresses.Find(orderDto.Address.Id);
+            //if (adress!=null)
             if (isThereCustomer)
             {
+                orderDto.CreatedAt = DateTime.Now;
                 _db.Orders.Add(_mapper.Map<OrderDto, Order>(orderDto));
+                
                 _db.SaveChanges();
                 return Ok();
             }
@@ -76,15 +80,26 @@ namespace OrderService.Controllers
 
         // PUT api/<OrderController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public void Put(int id, [FromBody] OrderDto orderDto)
         {
+            Order findResult = _db.Orders.Find(id);
+            findResult.Price = orderDto.Price;
+            findResult.Product =_mapper.Map<ProductDto,Product>(orderDto.Product);
+            findResult.Quantity = orderDto.Quantity;
+            findResult.Status = orderDto.Status;
+            findResult.UpdatedAt = DateTime.Now;
+            _db.SaveChanges();
+
         }
 
         // DELETE api/<OrderController>/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+            _db.Orders.Remove(_db.Orders.Find(id));
+            _db.SaveChanges();
+
         }
-        
+
     }
 }

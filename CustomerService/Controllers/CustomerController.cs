@@ -100,7 +100,7 @@ namespace CustomerService.Controllers
         {
             RabbitMQMessage rabbitMQMessage = new RabbitMQMessage { Customer = newCustomer, MQMessageType = messageType };
             string rabbitMQMessageJson = Newtonsoft.Json.JsonConvert.SerializeObject(rabbitMQMessage);
-            var factory = new ConnectionFactory() { HostName = "localhost"};
+            var factory = new ConnectionFactory() { HostName = "192.168.1.38", Port=5672};
 
             using (var connection = factory.CreateConnection())
             using (var channel = connection.CreateModel())

@@ -8,14 +8,21 @@ using System.Threading.Tasks;
 
 namespace OrderService.Mapping
 {
-    public class OrderProfile:Profile
+    public class OrderProfile : Profile
     {
         public OrderProfile()
         {
-            CreateMap<Order, OrderDto>().ReverseMap();
-            CreateMap<Address, AddressDto>().ReverseMap();
-            CreateMap<Product, ProductDto>().ReverseMap();
-            CreateMap<Customer, CustomerDto>().ReverseMap();
+            CreateMap<Order, OrderDto>();
+            CreateMap<OrderDto, Order>()
+                .ForMember(x => x.Id, opt => opt.Ignore());
+            CreateMap<Address, AddressDto>();
+            CreateMap<AddressDto, Address>()
+                .ForMember(x => x.Id, opt => opt.Ignore());
+            CreateMap<Product, ProductDto>();
+            CreateMap<ProductDto, Product>()
+                .ForMember(x => x.Id, opt => opt.Ignore());
+
+            CreateMap<Customer, CustomerDto>();
         }
     }
 }

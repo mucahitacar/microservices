@@ -39,6 +39,6 @@ namespace OrderService.DB
         public DbSet<Product> Products { get; set; }
         public DbSet<Customer> Customers { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-            => optionsBuilder.UseNpgsql("Host=localhost;Port=5433;Database=order_service;Username=postgres;Password=postgres");
+            => optionsBuilder.UseNpgsql("Host=192.168.1.38;Port=5433;Database=order_service;Username=postgres;Password=td");
     }
 }
